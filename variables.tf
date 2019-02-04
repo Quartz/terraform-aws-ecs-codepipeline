@@ -28,6 +28,16 @@ variable "service_name" {
   description = "ECS Service Name"
 }
 
+variable "staging_service_name" {
+  type        = "string"
+  description = "ECS Staging Service Name"
+}
+
+variable "approve_sns_arn" {
+  type        = "string"
+  description = "SNS topic ARN for code approval"
+}
+
 variable "github_oauth_token" {
   description = "GitHub Oauth Token with permissions to access private repositories"
 }

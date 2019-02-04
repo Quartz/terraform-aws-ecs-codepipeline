@@ -258,6 +258,42 @@ resource "aws_codepipeline" "source_build_deploy" {
 
       configuration {
         ClusterName = "${var.ecs_cluster_name}"
+        ServiceName = "${var.staging_service_name}"
+      }
+    }
+  }
+
+  stage {
+    name = "Approve"
+
+    action {
+      name     = "Approval"
+      category = "Approval"
+      owner    = "AWS"
+      provider = "Manual"
+      version  = "1"
+
+      configuration {
+        NotificationArn = "${var.approve_sns_arn}"
+        CustomData = ""
+        ExternalEntityLink = ""
+      }
+    }
+  }
+
+  stage {
+    name = "DeployProd"
+
+    action {
+      name            = "Deploy"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "ECS"
+      input_artifacts = ["task"]
+      version         = "1"
+
+      configuration {
+        ClusterName = "${var.ecs_cluster_name}"
         ServiceName = "${var.service_name}"
       }
     }
