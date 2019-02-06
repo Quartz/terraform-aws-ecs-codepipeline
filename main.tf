@@ -246,10 +246,10 @@ resource "aws_codepipeline" "source_build_deploy" {
   }
 
   stage {
-    name = "Deploy"
+    name = "Staging"
 
     action {
-      name            = "Deploy"
+      name            = "DeployStaging"
       category        = "Deploy"
       owner           = "AWS"
       provider        = "ECS"
@@ -264,7 +264,7 @@ resource "aws_codepipeline" "source_build_deploy" {
   }
 
   stage {
-    name = "Approve"
+    name = "Approval"
 
     action {
       name     = "Approval"
@@ -275,17 +275,15 @@ resource "aws_codepipeline" "source_build_deploy" {
 
       configuration {
         NotificationArn = "${var.approve_sns_arn}"
-        CustomData = ""
-        ExternalEntityLink = ""
       }
     }
   }
 
   stage {
-    name = "DeployProd"
+    name = "Production"
 
     action {
-      name            = "Deploy"
+      name            = "DeployProd"
       category        = "Deploy"
       owner           = "AWS"
       provider        = "ECS"
